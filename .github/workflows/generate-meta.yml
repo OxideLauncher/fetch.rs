@@ -1,0 +1,57 @@
+name: Generate Minecraft Metadata
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Allow manual triggers
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  generate-metadata:
+    name: Generate and Upload Metadata
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Build oxide-meta
+        run: cargo build --release
+
+      - name: Generate and upload metadata
+        env:
+          RUST_LOG: warn,oxide_meta=info
+          BASE_URL: https://meta.oxidelauncher.org
+          CONCURRENCY_LIMIT: 10
+          S3_URL: ${{ secrets.R2_ACCOUNT_ID }}
+          S3_REGION: r2
+          S3_BUCKET_NAME: oxide-meta
+          S3_ACCESS_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID }}
+          S3_SECRET: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_INTEGRATION: true
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: ./target/release/oxide_meta
+
+      - name: Report success
+        if: success()
+        run: echo "✅ Metadata generation completed successfully!"
+
+      - name: Report failure
+        if: failure()
+        run: echo "❌ Metadata generation failed. Check logs for details."

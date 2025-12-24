@@ -1,0 +1,35 @@
+# Build artifacts
+/target
+debug/
+*.pdb
+
+# Cargo files
+Cargo.lock
+
+# Environment files (keep .env.example)
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Reference materials (don't commit)
+/reference/
+
+# Claude files or local .md files
+*claude.md
+*.local.md
+status.md
+/docs
