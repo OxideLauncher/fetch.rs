@@ -1,10 +1,61 @@
+[workspace]
+members = ["packages/*"]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+
+[workspace.lints.rust]
+unused_import_braces = "warn"
+missing_debug_implementations = "warn"
+
+[workspace.dependencies]
+# Internal
+daedalus = { path = "packages/daedalus" }
+
+# Async runtime
+tokio = "1"
+futures = "0.3"
+
+# HTTP/Networking
+reqwest = { version = "0.12", default-features = false }
+
+# Serialization
+serde = "1"
+serde_json = "1"
+serde-xml-rs = "0.6"
+
+# S3/Storage
+rust-s3 = { version = "0.35", default-features = false, features = ["tokio-rustls-tls"] }
+
+# Archive handling
+async_zip = "0.0.17"
+
+# Date/Time
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+
+# Utilities
+bytes = "1"
+dashmap = "6"
+dotenvy = "0.15"
+indexmap = "2"
+itertools = "0.13"
+sha1_smol = "1"
+thiserror = "2"
+
+# Logging
+tracing = "0.1"
+tracing-error = "0.2"
+tracing-subscriber = "0.3"
+
 [package]
 name = "oxide_meta"
 version = "0.1.0"
 description = "Oxide Launcher Minecraft metadata generator"
 authors = ["OxideLauncher Contributors"]
-license = "MIT"
-repository = "https://github.com/OxideLauncher/oxide-meta"
+license.workspace = true
+repository = "https://github.com/OxideLauncher/fetch.rs"
 edition.workspace = true
 
 [dependencies]

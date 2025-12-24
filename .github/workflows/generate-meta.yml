@@ -23,7 +23,8 @@ jobs:
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
+          toolchain: nightly
+          # Using nightly for Rust 2024 edition features (let chains)
 
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2

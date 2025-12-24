@@ -138,7 +138,8 @@ pub async fn upload_url_to_bucket(
 #[tracing::instrument(skip(bytes))]
 pub async fn sha1_async(bytes: Bytes) -> Result<String, Error> {
     let hash = tokio::task::spawn_blocking(move || {
-        sha1_smol::Sha1::from(bytes).hexdigest()
+        let digest = sha1_smol::Sha1::from(bytes).digest().bytes();
+        digest.iter().map(|b| format!("{:02x}", b)).collect::<String>()
     })
     .await?;
 
