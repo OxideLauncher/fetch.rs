@@ -49,7 +49,8 @@ pub static REQWEST_CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 
     reqwest::Client::builder()
         .tcp_keepalive(Some(std::time::Duration::from_secs(10)))
-        .timeout(std::time::Duration::from_secs(15))
+        .timeout(std::time::Duration::from_secs(60))
+        .connect_timeout(std::time::Duration::from_secs(30))
         .default_headers(headers)
         .build()
         .unwrap()
